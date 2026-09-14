@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CITO Laundry Express</title>
+    <title>CITO Laundry Express - Master Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -11,107 +11,175 @@
             theme: {
                 extend: {
                     colors: {
-                        cito: { teal: '#009ca6', pink: '#e6007e', orange: '#f5a623' }
+                        cito: {
+                            teal: '#009ca6',
+                            pink: '#e6007e',
+                            orange: '#f5a623'
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        .hidden-menu { display: none; }
-        .active-menu { display: block; }
-        .stepper-item.completed .step-counter { background-color: #009ca6; color: white; }
+        .hidden-menu { display: none !important; }
+        .active-menu { display: block !important; }
+        /* Smooth transitions for the hamburger menu */
+        #mobile-menu { transition: max-height 0.3s ease-in-out; overflow: hidden; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-800 font-sans selection:bg-cito-pink selection:text-white">
 
-    <!-- Login Screen -->
+    <!-- LOGIN SCREEN -->
     <div id="login-screen" class="min-h-screen flex items-center justify-center bg-cito-teal p-4">
-        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md text-center">
-            <h1 class="text-4xl font-black text-cito-teal italic tracking-tighter mb-2">CITO</h1>
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
+            <div class="flex justify-center items-center gap-2 mb-2">
+                <svg class="w-10 h-10 text-cito-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <h1 class="text-5xl font-black text-cito-teal italic tracking-tighter">CITO</h1>
+            </div>
             <h2 class="text-xl font-bold text-gray-700 mb-1">LAUNDRY EXPRESS</h2>
-            <p class="text-sm font-bold text-cito-pink mb-8 bg-pink-50 py-1 rounded-full">#GetCleanGetGoing</p>
+            <p class="text-sm font-bold text-cito-pink mb-8 bg-pink-50 py-1 rounded-full mx-auto w-3/4">#GetCleanGetGoing</p>
             
-            <input type="text" id="username" placeholder="Username (e.g., admin)" class="w-full border-2 border-gray-200 rounded-lg p-3 mb-4 focus:border-cito-teal outline-none">
-            <input type="password" id="pin" placeholder="PIN" class="w-full border-2 border-gray-200 rounded-lg p-3 mb-6 focus:border-cito-teal outline-none">
+            <input type="text" id="username" placeholder="Username (e.g., admin)" class="w-full border-2 border-gray-200 rounded-xl p-3 mb-4 focus:border-cito-teal focus:ring-2 focus:ring-teal-100 outline-none transition">
+            <input type="password" id="pin" placeholder="PIN (e.g., 1234)" class="w-full border-2 border-gray-200 rounded-xl p-3 mb-6 focus:border-cito-teal focus:ring-2 focus:ring-teal-100 outline-none transition">
             
-            <button onclick="handleLogin()" class="w-full bg-cito-teal text-white font-bold py-3 rounded-lg hover:bg-teal-600 transition shadow-lg">LOGIN</button>
+            <button onclick="handleLogin()" class="w-full bg-cito-teal text-white font-bold py-3 rounded-xl hover:bg-teal-600 transition shadow-lg text-lg">LOGIN</button>
         </div>
     </div>
 
-    <!-- Main App -->
-    <div id="main-app" class="hidden min-h-screen flex flex-col md:flex-row">
+    <!-- MAIN APP DASHBOARD -->
+    <div id="main-app" class="hidden min-h-screen flex flex-col">
         
-        <!-- Top Mobile Header & Desktop Sidebar -->
-        <header class="bg-white shadow-md p-4 flex justify-between items-center md:w-64 md:flex-col md:justify-start md:h-screen md:fixed z-50">
-            <div class="flex items-center justify-between w-full md:mb-8">
-                <div class="flex items-center gap-2">
-                    <button onclick="toggleMenu()" class="md:hidden text-gray-600 focus:outline-none">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </button>
-                    <span class="text-2xl font-black text-cito-teal italic tracking-tighter">CITO</span>
+        <!-- Top Navigation Bar (Responsive) -->
+        <header class="bg-white shadow-sm border-b-4 border-cito-teal sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo & Hamburger -->
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleMenu()" class="text-gray-600 hover:text-cito-teal focus:outline-none lg:hidden">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                        <div class="flex items-center gap-1">
+                            <span class="text-3xl font-black text-cito-teal italic tracking-tighter">CITO</span>
+                            <span class="hidden md:block text-sm font-bold text-cito-pink ml-2">Console</span>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Nav Links -->
+                    <nav class="hidden lg:flex space-x-8">
+                        <button onclick="switchTab('dashboard')" class="text-gray-700 hover:text-cito-teal font-bold px-3 py-2 rounded-md">Dashboard</button>
+                        <button onclick="switchTab('orders')" class="text-gray-700 hover:text-cito-teal font-bold px-3 py-2 rounded-md">Orders</button>
+                        <button onclick="switchTab('finance')" class="text-gray-700 hover:text-cito-teal font-bold px-3 py-2 rounded-md owner-only">Finance</button>
+                    </nav>
+
+                    <!-- Right Side Actions -->
+                    <div class="flex items-center gap-4">
+                        <select id="lang-select" class="bg-gray-100 border-none rounded-lg text-sm font-bold text-gray-700 py-1 px-2 outline-none focus:ring-2 focus:ring-cito-teal">
+                            <option value="id">ID</option>
+                            <option value="en">EN</option>
+                        </select>
+                        <button onclick="logout()" class="bg-red-50 text-red-600 hover:bg-red-100 font-bold p-2 rounded-lg transition" title="Logout">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Navigation Menu -->
-            <nav id="nav-menu" class="hidden-menu absolute top-16 left-0 w-full bg-white shadow-lg md:shadow-none md:static md:block md:w-full">
-                <ul class="flex flex-col gap-2 p-4 md:p-0">
-                    <li><button onclick="switchTab('dashboard')" class="w-full text-left p-3 rounded-lg font-bold text-gray-600 hover:bg-teal-50 hover:text-cito-teal">Dashboard</button></li>
-                    <li><button onclick="switchTab('orders')" class="w-full text-left p-3 rounded-lg font-bold text-gray-600 hover:bg-teal-50 hover:text-cito-teal">Orders</button></li>
-                    <li id="nav-register"><button onclick="switchTab('register')" class="w-full text-left p-3 rounded-lg font-bold text-gray-600 hover:bg-teal-50 hover:text-cito-teal">Cash Register</button></li>
-                    <li id="nav-finance"><button onclick="switchTab('finance')" class="w-full text-left p-3 rounded-lg font-bold text-gray-600 hover:bg-teal-50 hover:text-cito-teal">Finance</button></li>
-                </ul>
-                <div class="p-4 md:p-0 md:mt-auto border-t mt-4 md:border-none">
-                    <select id="lang-select" onchange="changeLanguage()" class="mb-4 w-full p-2 border rounded text-sm outline-none">
-                        <option value="id">Bahasa Indonesia</option>
-                        <option value="en">English</option>
-                    </select>
-                    <button onclick="logout()" class="w-full bg-red-100 text-red-600 font-bold py-2 rounded-lg">Logout</button>
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="lg:hidden max-h-0 bg-white border-b border-gray-200">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <button onclick="switchTab('dashboard')" class="block w-full text-left px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-teal-50 hover:text-cito-teal">Dashboard</button>
+                    <button onclick="switchTab('orders')" class="block w-full text-left px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-teal-50 hover:text-cito-teal">Orders</button>
+                    <button onclick="switchTab('finance')" class="block w-full text-left px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-teal-50 hover:text-cito-teal owner-only">Finance</button>
                 </div>
-            </nav>
+            </div>
         </header>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 p-4 md:ml-64 bg-gray-50 h-screen overflow-y-auto">
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8">
             
-            <!-- Dashboard Tab -->
-            <div id="tab-dashboard" class="tab-content active-menu">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800" id="dash-title">Dashboard</h2>
-                </div>
+            <!-- Dashboard Tab (Grid Layout) -->
+            <div id="tab-dashboard" class="tab-content active-menu space-y-6">
                 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <button onclick="openModal('modal-new-order')" class="bg-cito-teal text-white p-4 rounded-xl shadow font-bold flex flex-col items-center justify-center hover:bg-teal-600">
-                        <span class="text-2xl mb-1">+</span> New Order
+                <!-- Stats Row -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-cito-teal">
+                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Pesanan Aktif</p>
+                        <h3 class="text-3xl font-black text-gray-800" id="stat-active-orders">0</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-cito-pink owner-only">
+                        <p class="text-sm text-gray-500 font-bold uppercase tracking-wider mb-1">Pendapatan (Hari Ini)</p>
+                        <h3 class="text-2xl font-black text-gray-800" id="stat-income">Rp 0</h3>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Responsive Grid) -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="bg-cito-teal text-white p-4 rounded-xl shadow-md font-bold flex flex-col items-center justify-center hover:bg-teal-600 transition">
+                        <span class="text-2xl mb-1">+</span> Pesanan Baru
                     </button>
-                    <button onclick="openModal('modal-expense')" class="bg-cito-pink text-white p-4 rounded-xl shadow font-bold flex flex-col items-center justify-center hover:bg-pink-600">
-                        <span class="text-2xl mb-1">-</span> Add Expense
+                    <button class="bg-cito-orange text-white p-4 rounded-xl shadow-md font-bold flex flex-col items-center justify-center hover:bg-orange-500 transition owner-only">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        Manage Services
                     </button>
-                    <button onclick="openModal('modal-wa-template')" class="bg-green-500 text-white p-4 rounded-xl shadow font-bold flex flex-col items-center justify-center hover:bg-green-600">
-                        <span class="text-xl mb-1">WA</span> Template
+                    <button class="bg-green-500 text-white p-4 rounded-xl shadow-md font-bold flex flex-col items-center justify-center hover:bg-green-600 transition owner-only">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        WA Template
+                    </button>
+                    <button class="bg-gray-800 text-white p-4 rounded-xl shadow-md font-bold flex flex-col items-center justify-center hover:bg-gray-700 transition owner-only">
+                        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Staff Settings
                     </button>
                 </div>
 
-                <div class="bg-white rounded-xl shadow p-4">
-                    <h3 class="font-bold text-gray-700 mb-4 border-b pb-2 border-cito-teal">Recent Activity</h3>
-                    <div id="activity-feed" class="text-sm text-gray-500 italic">Waiting for database sync...</div>
+                <!-- Split View Dashboard (Left: Content, Right: Live Feed) -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
+                        <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2">
+                            <span class="w-2 h-6 bg-cito-pink rounded-full block"></span>
+                            Ikhtisar Keuangan
+                        </h3>
+                        <div class="h-64 flex items-center justify-center bg-gray-50 rounded-xl border-dashed border-2 border-gray-200">
+                            <p class="text-gray-400 font-bold">Chart.js Analytics Area</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 h-96 overflow-y-auto">
+                        <h3 class="font-bold text-gray-800 text-lg mb-4 flex items-center gap-2 sticky top-0 bg-white pb-2 border-b">
+                            <span class="w-2 h-2 bg-green-500 rounded-full block animate-pulse"></span>
+                            Live Activity
+                        </h3>
+                        <div id="activity-feed" class="space-y-3 text-sm">
+                            <p class="text-gray-500 italic">Menghubungkan ke Cloud Database...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Orders Tab -->
             <div id="tab-orders" class="tab-content hidden-menu">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Active Orders</h2>
-                <div id="orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <h2 class="text-2xl font-black text-gray-800 mb-6">Manajemen Pesanan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="orders-grid">
+                    <!-- Orders will populate here dynamically -->
+                </div>
+            </div>
+            
+            <!-- Finance Tab -->
+            <div id="tab-finance" class="tab-content hidden-menu owner-only">
+                <h2 class="text-2xl font-black text-gray-800 mb-6">Laporan Keuangan & AI</h2>
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                    <p class="text-gray-600">Integrasi Gemini AI Financial Analysis aktif.</p>
+                </div>
             </div>
 
         </main>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- FIREBASE & APP LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         // 1. YOUR LIVE FIREBASE CONFIGURATION
         const firebaseConfig = {
@@ -126,15 +194,18 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // 2. SHARED MASTER DATABASE PATH
-        const MASTER_DB_PATH = "cito_master_database";
 
-        // Make global functions available to HTML onclick handlers
+        // 2. THE SYNC FIX: Master Path for all devices
+        const MASTER_PATH = "cito_master_database";
+
+        // Core UI Functions
         window.toggleMenu = () => {
-            const menu = document.getElementById('nav-menu');
-            menu.classList.toggle('hidden-menu');
-            menu.classList.toggle('active-menu');
+            const menu = document.getElementById('mobile-menu');
+            if (menu.style.maxHeight) {
+                menu.style.maxHeight = null;
+            } else {
+                menu.style.maxHeight = menu.scrollHeight + "px";
+            }
         };
 
         window.switchTab = (tabId) => {
@@ -145,24 +216,33 @@
                 activeTab.classList.remove('hidden-menu');
                 activeTab.classList.add('active-menu');
             }
-            if(window.innerWidth < 768) window.toggleMenu();
+            // Auto-close mobile menu on selection
+            const menu = document.getElementById('mobile-menu');
+            if (menu.style.maxHeight) menu.style.maxHeight = null;
         };
 
         window.handleLogin = async () => {
             const user = document.getElementById('username').value.toLowerCase();
             const pin = document.getElementById('pin').value;
             
-            if (user === 'admin' && pin === '1234') {
+            // Simple Role Check (Expandable in Staff Settings)
+            if ((user === 'admin' && pin === '1234') || (user === 'kasir' && pin === '0000')) {
                 try {
                     await signInAnonymously(auth);
                     document.getElementById('login-screen').classList.add('hidden');
                     document.getElementById('main-app').classList.remove('hidden');
-                    startDatabaseSync();
+                    
+                    // Hide Owner-Only elements if cashier logs in
+                    if(user !== 'admin') {
+                        document.querySelectorAll('.owner-only').forEach(el => el.classList.add('hidden'));
+                    }
+
+                    startRealtimeSync();
                 } catch (error) {
-                    alert("Authentication Failed: " + error.message);
+                    alert("Koneksi gagal. Periksa jaringan Anda. " + error.message);
                 }
             } else {
-                alert("Invalid Credentials");
+                alert("Username atau PIN salah!");
             }
         };
 
@@ -171,32 +251,56 @@
             document.getElementById('main-app').classList.add('hidden');
             document.getElementById('username').value = '';
             document.getElementById('pin').value = '';
+            // Reset owner visibility
+            document.querySelectorAll('.owner-only').forEach(el => el.classList.remove('hidden'));
         };
 
-        window.formatPhoneNumber = (phone) => {
+        // Utility: IDR Formatter
+        window.formatIDR = (number) => {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        };
+
+        // Utility: WhatsApp Number Formatter (+62)
+        window.formatWA = (phone) => {
             let cleaned = phone.replace(/\D/g, '');
             if (cleaned.startsWith('0')) cleaned = '62' + cleaned.substring(1);
             if (!cleaned.startsWith('62')) cleaned = '62' + cleaned;
             return cleaned;
         };
 
-        function startDatabaseSync() {
-            // Pointing directly to the shared folder so all devices see the same data
-            const ordersRef = collection(db, "stores", MASTER_DB_PATH, "orders");
+        // 3. START REAL-TIME DATABASE SYNC
+        function startRealtimeSync() {
+            const ordersRef = collection(db, "stores", MASTER_PATH, "orders");
             
             onSnapshot(ordersRef, (snapshot) => {
                 const feed = document.getElementById('activity-feed');
                 if(snapshot.empty) {
-                    feed.innerHTML = "Tidak ada pesanan aktif (No active orders).";
+                    feed.innerHTML = "<p class='text-gray-500 italic'>Belum ada pesanan.</p>";
                     return;
                 }
+                
                 feed.innerHTML = "";
+                let activeCount = 0;
+                
                 snapshot.forEach(doc => {
-                    feed.innerHTML += `<div class="p-2 border-b">Order ID: ${doc.id} - Synced from Cloud!</div>`;
+                    const data = doc.data();
+                    activeCount++;
+                    // Populate Live Feed
+                    feed.innerHTML += `
+                        <div class="p-3 bg-teal-50 text-teal-900 rounded-lg border border-teal-100 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-xs uppercase bg-white px-2 py-1 rounded shadow-sm mr-2">${doc.id.substring(0,5)}</span>
+                                <span class="font-medium">${data.customerName || 'Pelanggan'}</span>
+                            </div>
+                            <span class="text-xs font-bold text-cito-teal animate-pulse">SYNCED</span>
+                        </div>
+                    `;
                 });
+                
+                document.getElementById('stat-active-orders').innerText = activeCount;
             }, (error) => {
-                console.error("Sync Error:", error);
-                document.getElementById('activity-feed').innerHTML = "Database Connection Error: " + error.message;
+                console.error("Database Sync Error:", error);
+                document.getElementById('activity-feed').innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
             });
         }
     </script>
